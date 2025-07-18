@@ -1,0 +1,1 @@
+This is the Django project repository, where I'll be performing alal the tasks given by the consultadd.
