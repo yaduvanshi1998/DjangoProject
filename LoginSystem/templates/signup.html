@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            border: 2px solid black;
+            padding: 20px;
+            width: fit-content;
+            margin-left: 650px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <h1 style='display: flex; justify-content: center; padding-top: 150px;'> Signup page! </h1>
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="username">
+                Username:<br/>
+                <input type="text" name="Username" id="Username" required>
+            </div><br/>
+            <div class="email">
+                Email:<br/>
+                <input type="email" name="Email" id="Email" required>
+            </div><br/>
+            <div class="password">
+                Password:<br/>
+                <input type="password" name="Password" id="Password" required>
+            </div><br/>
+            <div class="submit">
+                <button class="btn-success" id="submit" type="submit">Submit</button>
+            </div> 
+        </form>
+    </div>
+</body>
+</html>
+
