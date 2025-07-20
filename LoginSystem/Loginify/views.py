@@ -3,7 +3,9 @@ from .models import UserDetails
 from django.contrib import messages
 from Loginify.serializer import UserDetailsSerializer
 from django.http import JsonResponse
+import json
 from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 
@@ -80,6 +82,7 @@ def signup(request):
 
     return render(request, 'signup.html')
 
+#------------------- get all the user's details -------------------
 
 def get_all_userdetails(request):
     try:
@@ -91,3 +94,47 @@ def get_all_userdetails(request):
             return JsonResponse({'error': 'Only GET requests are allowed'}, status=405) # status=405 --- method not allowed
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500) # status=500 --- internal server error
+
+#---------------------- get user's details using enail id -----------------------
+
+def get_user_by_email(request, Email):
+    try:
+        if request.method=="GET":
+            data = UserDetails.objects.get(Email=Email)
+            serialized_data = UserDetailsSerializer(data)
+            return JsonResponse(serialized_data.data, safe=False, status=200)
+        else:
+            return JsonResponse({'error': 'Only GET requests are allowed'}, status=405)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+#------------------ update the user's details using username -------------------
+
+@csrf_exempt
+def update_user_details(request, Username):
+    try:
+        if request.method=="PUT":
+            user = UserDetails.objects.get(Username=Username)
+            input_data = json.loads(request.body) # converting json passed data into dict form
+            serialized_data = UserDetailsSerializer(user, data=input_data)
+            if serialized_data.is_valid():
+                serialized_data.save()
+                return JsonResponse(serialized_data.data, safe=False, status=200)
+        else:
+            return JsonResponse({'error': 'Only PUT requests are allowed'}, status=405)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+#------------------------ delete the user details using email ----------------------
+
+@csrf_exempt
+def delete_user_by_email(request, Email):
+    try:
+        if request.method=="DELETE":
+            user = UserDetails.objects.get(Email=Email)
+            user.delete()
+            return JsonResponse({"success":True}, status=200)
+        else:
+            return JsonResponse({'error': 'Only DELETE requests are allowed'}, status=405)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
