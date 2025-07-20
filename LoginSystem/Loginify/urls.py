@@ -21,5 +21,8 @@ from Loginify import views
 urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('login/', views.login, name="login"),
-    path('user-details/', views.get_all_userdetails, name='user-details')
+    path('user-details/', views.get_all_userdetails, name='user-details'),
+    path('user-by-email/<str:Email>/', views.get_user_by_email, name='user-by-email'),
+    path('update-user/<str:Username>/', views.update_user_details, name = 'update-user'),
+    path('delete-user/<str:Email>/', views.delete_user_by_email, name='delete-user')
 ]
